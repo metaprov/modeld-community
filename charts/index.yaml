@@ -1,0 +1,32 @@
+apiVersion: v1
+entries:
+  modeld:
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2020-05-28T13:09:44.718621883-07:00"
+    dependencies:
+    - name: cert-manager
+      repository: https://charts.jetstack.io
+      version: v0.15.0
+    description: Machine Learning Operators
+    digest: 107e846aaf00aae6f246af2f5f21e55abcd720d34ee61522530ded536931c3fd
+    home: https://modeld.io
+    keywords:
+    - kubernetes
+    - go
+    - golang
+    - ai
+    - machine learning
+    kubeVersion: '>= 1.15.0 < 1.18.0'
+    maintainers:
+    - email: support@modeld.io
+      name: metaprov
+      url: https://groups.google.com/forum/#!forum/modeld-discuss
+    name: modeld
+    sources:
+    - https://github.com/metaprov/modeld
+    type: application
+    urls:
+    - https://metaprov.github.io/modeld-community/modeld-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-05-28T13:09:44.695820203-07:00"
