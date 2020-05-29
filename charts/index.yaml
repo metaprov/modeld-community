@@ -27,6 +27,6 @@ entries:
     - https://github.com/metaprov/modeld
     type: application
     urls:
-    - https://metaprov.github.io/modeld-community/modeld-0.1.0.tgz
+    - https://metaprov.github.io/modeld-community/charts/modeld-0.1.0.tgz
     version: 0.1.0
 generated: "2020-05-28T13:09:44.695820203-07:00"
