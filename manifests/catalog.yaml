@@ -1,0 +1,300 @@
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  labels:
+    app.kubernetes.io/part-of: modeld
+  name: catboost
+  namespace: modeld-catalog
+spec:
+  description: catboost description
+  language: python
+  url: https://catboost.ai/
+  version: 1.2.2
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  name: fbprophet
+  namespace: modeld-catalog
+spec:
+  description: fbprophet description
+  language: python
+  url: https://facebook.github.io/prophet/docs/quick_start.html
+  version: 1.0.0
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  labels:
+    app.kubernetes.io/part-of: modeld
+  name: lightgbm
+  namespace: modeld-catalog
+spec:
+  description: lightgbm
+  language: python
+  url: https://lightgbm.readthedocs.io/en/latest/
+  version: 1.2.2
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  name: pytorch
+  namespace: modeld-catalog
+spec:
+  description: pytorch
+  language: python
+  url: https://pytorch.devpost.com/
+  version: 1.0.0
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  name: scikit-learn
+  namespace: modeld-catalog
+spec:
+  description: scikit-learn description
+  language: python
+  url: https://scikit-learn.org/stable/
+  version: 2.1.0
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  name: tensorflow
+  namespace: modeld-catalog
+spec:
+  description: tensorflow
+  language: python
+  url: https://www.tensorflow.org/
+  version: 1.0.0
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: MLFramework
+metadata:
+  name: xgboost
+  namespace: modeld-catalog
+spec:
+  description: xgboost description
+  language: python
+  url: https://xgboost.readthedocs.io/en/latest/
+  version: 1.0.0
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: TrainerClass
+metadata:
+  name: classical-trainer
+  namespace: modeld-catalog
+spec:
+  image: quay.io/metaprov/modeld-trainer:latest
+  podTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-trainer
+    spec:
+      containers:
+      - image: quay.io/metaprov/modeld-trainer:latest
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      - image: quay.io/metaprov/clouds:latest
+        imagePullPolicy: IfNotPresent
+        name: sidecar
+        ports:
+        - containerPort: 8090
+          name: http
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      volumes:
+      - emptyDir: {}
+        name: data
+  tasks:
+  - binary-classification
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: TrainerClass
+metadata:
+  name: pytorch-trainer
+  namespace: modeld-catalog
+spec:
+  image: gcr.io/modeld/trainer:latest
+  tasks:
+  - binary-classification
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-trainer
+    spec:
+      containers:
+      - image: gcr.io/modeld/trainer:latest
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      - image: gcr.io/modeld/clouds:latest
+        imagePullPolicy: IfNotPresent
+        name: sidecar
+        ports:
+        - containerPort: 8090
+          name: http
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      volumes:
+      - emptyDir: {}
+        name: data
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: TrainerClass
+metadata:
+  name: tensorflow-trainer
+  namespace: modeld-catalog
+spec:
+  image: gcr.io/modeld/trainer:latest
+  tasks:
+  - binary-classification
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: modeld-trainer
+    spec:
+      containers:
+      - image: gcr.io/modeld/trainer:latest
+        imagePullPolicy: IfNotPresent
+        name: main
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      - image: gcr.io/modeld/clouds:latest
+        imagePullPolicy: IfNotPresent
+        name: sidecar
+        ports:
+        - containerPort: 8090
+          name: http
+        volumeMounts:
+        - mountPath: /home/modeld/data
+          name: data
+      volumes:
+      - emptyDir: {}
+        name: data
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: administrator
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: data-engineer
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: data-operations
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: data-scientist
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: domain-expert
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: end-user
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: catalog.modeld.io/v1alpha1
+kind: UserRoleClass
+metadata:
+  name: sponsor
+  namespace: modeld-catalog
+spec:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - watch
+    - list

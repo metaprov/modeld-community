@@ -1,0 +1,499 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/part-of: modeld
+  name: admin
+  namespace: default-tenant
+stringData:
+  passwordHash: $2a$14$d154O63mraxngBiKDbiUc.fZskDLOH9j1VZ9LCl9l3/4dIre/lRny
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/part-of: modeld
+  name: default-aws-secret
+  namespace: default-tenant
+stringData:
+  aws-access-key: ""
+  aws-az: ""
+  aws-secret-key: ""
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-azure-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-azure-secret
+  namespace: default-tenant
+stringData:
+  azure-storage-access-key: ""
+  azure-storage-account-name: ""
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-digitalocean-secret
+    app.kubernetes.io/part-of: modeld
+  name: default-digitalocean-secret
+  namespace: default-tenant
+stringData:
+  digitalocean-region: ""
+  digitalocean-spaces-access-key: ""
+  digitalocean-spaces-access-secret: ""
+  digitalocean-token: ""
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-dockerhub-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-dockerhub-secret
+  namespace: default-tenant
+stringData:
+  image-registry-host: ""
+  image-registry-password: ""
+  image-registry-username: ""
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-email-secret
+    app.kubernetes.io/part-of: modeld
+  name: default-email-secret
+  namespace: default-tenant
+stringData:
+  email-password: ""
+  email-username: ""
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-gcp-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-gcp-secret
+  namespace: default-tenant
+stringData:
+  gcp-access-key: ""
+  gcp-az: ""
+  gcp-keyfile: ""
+  gcp-project: ""
+  gcp-secret-key: ""
+type: Opaque
+---
+apiVersion: v1
+data:
+  github-token: ""
+  github-username: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-github-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-github-secret
+  namespace: default-tenant
+type: Opaque
+---
+apiVersion: v1
+data:
+  gcp-access-key: ""
+  gcp-az: ""
+  gcp-secret-key: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-gitlab-secret
+    app.kubernetes.io/part-of: modeld
+  name: default-gitlab-secret
+  namespace: default-tenant
+type: Opaque
+---
+apiVersion: v1
+data:
+  license-key: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-license-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-license-secret
+  namespace: default-tenant
+type: Opaque
+---
+apiVersion: v1
+data:
+  minio-password: ""
+  minio-username: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-minio-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-minio-secret
+  namespace: default-tenant
+type: Opaque
+---
+apiVersion: v1
+data:
+  slack-token: ""
+  slack-username: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-slack-secret
+    app.kubernetes.io/part-of: modeld
+  name: default-slack-secret
+  namespace: default-tenant
+type: Opaque
+---
+apiVersion: data.modeld.io/v1alpha1
+kind: DataProduct
+metadata:
+  name: iris-product
+  namespace: default-tenant
+spec:
+  bucketName: default-digitalocean-bucket
+  gitRepoName: default-git-repository
+  imageRepoName: iris
+  labName: default-lab
+  labelColumn: class
+  servingSiteName: default-serving-site
+  task: binary-classification
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Account
+metadata:
+  labels:
+    app: nginx
+    environment: production
+  name: admin
+  namespace: default-tenant
+spec:
+  email: admin@example
+  firstName: admin
+  lastName: admin
+  phone: 444-4444-444
+  productBindings:
+  - entity: iris-product
+    role: administrator
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  type: user
+  userName: admin
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/part-of: modeld
+  name: admin
+  namespace: default-tenant
+spec:
+  provider: useraccount
+  secretName: admin
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-aws-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-aws-credential
+  namespace: default-tenant
+spec:
+  provider: aws
+  secretName: default-aws-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: modeld-azure-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-azure-credential
+  namespace: default-tenant
+spec:
+  provider: azure
+  secretName: default-azure-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-digitalocean-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-digitalocean-credential
+  namespace: default-tenant
+spec:
+  provider: digitalocean
+  secretName: default-digitalocean-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-github-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-dockerhub-credential
+  namespace: default-tenant
+spec:
+  provider: docker-hub
+  secretName: default-github-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-slack-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-email-credential
+  namespace: default-tenant
+spec:
+  provider: email
+  secretName: default-email-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: modeld-gcp-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-gcp-credential
+  namespace: default-tenant
+spec:
+  provider: gcp
+  secretName: modeld-gcp-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-github-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-github-credential
+  namespace: default-tenant
+spec:
+  provider: github
+  secretName: default-github-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-license-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-license-credential
+  namespace: default-tenant
+spec:
+  provider: license
+  secretName: default-license-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: modeld-minio-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-minio-credential
+  namespace: default-tenant
+spec:
+  provider: minio
+  secretName: modeld-minio-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Credential
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-slack-credential
+    app.kubernetes.io/part-of: modeld
+  name: default-slack-credential
+  namespace: default-tenant
+spec:
+  provider: slack
+  secretName: default-slack-secret
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: GitRepository
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-gitrepository
+    app.kubernetes.io/part-of: modeld
+  name: default-gitrepository
+  namespace: default-tenant
+spec:
+  credentialName: default-github-credential
+  provider: gitrepository
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: ImageRepository
+metadata:
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/name: default-gitrepository
+    app.kubernetes.io/part-of: modeld
+  name: iris
+  namespace: default-tenant
+spec:
+  credentialName: default-dockerhub-credential
+  imageName: quay.io/metaprov/iris
+  productName: iris-product
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Lab
+metadata:
+  name: default-lab
+  namespace: default-tenant
+spec:
+  gitrepoName: default-github-repo
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: License
+metadata:
+  name: default-license
+  namespace: default-tenant
+spec:
+  credentialName: default-license-credential
+  notifierSelector:
+    app: general
+  tenantRef:
+    name: default-teant
+    namespace: modeld-system
+  type: lite
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Notifier
+metadata:
+  name: default-email-notifier
+  namespace: default-tenant
+spec:
+  email:
+    credentialName: default-email-credential
+    from: notifier@hotmail.com
+    host: host
+    port: 5332
+    to:
+    - admin@example.com
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  type: email
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: Notifier
+metadata:
+  name: default-slack-notifier
+  namespace: default-tenant
+spec:
+  slack:
+    webhook: http://www.slack.com
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+  type: slack
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: ServingSite
+metadata:
+  name: default-serving-site
+  namespace: default-tenant
+spec:
+  fdqn: serving.modeld.io
+  ingressref:
+    name: default-ingress
+    namespace: default-tenant
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
+---
+apiVersion: infra.modeld.io/v1alpha1
+kind: VirtualBucket
+metadata:
+  name: default-digitalocean-bucket
+  namespace: default-tenant
+spec:
+  credentialName: default-digitalocean-credential
+  tenantRef:
+    name: default-tenant
+    namespace: modeld-system
